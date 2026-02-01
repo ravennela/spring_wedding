@@ -1,5 +1,6 @@
 package com.example.online.booking.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.example.online.common.entity.BaseEntity;
@@ -9,7 +10,13 @@ import com.example.online.event.entity.EventType;
 import com.example.online.location.enitity.City;
 import com.example.online.user.entity.User;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "bookings")
@@ -51,13 +58,13 @@ public class Booking extends BaseEntity {
 
     // 💰 Final price (copied at booking time)
     @Column(name = "final_price", nullable = false)
-    private Double totalAmount;
+    private BigDecimal totalAmount;
 
     @Column(name = "booking_code")
     private String bookingCode;
 
     @Column(name = "advance_amount")
-    private Double advanceAmount;
+    private BigDecimal  advanceAmount;
 
     public User getCustomer() {
         return customer;
@@ -123,19 +130,19 @@ public class Booking extends BaseEntity {
         this.vendor = vendor;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal  totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public Double getAdvanceAmount() {
+    public BigDecimal  getAdvanceAmount() {
         return advanceAmount;
     }
 
-    public void setAdvanceAmount(Double advanceAmount) {
+    public void setAdvanceAmount(BigDecimal  advanceAmount) {
         this.advanceAmount = advanceAmount;
     }
 

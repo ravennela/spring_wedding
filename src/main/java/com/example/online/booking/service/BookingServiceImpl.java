@@ -64,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
         dto.setEventType(booking.getEventType().getName());
         dto.setDecorationTitle(
                 booking.getDecoration() != null
-                        ? booking.getDecoration().getTitle()
+                        ? booking.getDecoration().getName()
                         : null);
         dto.setCity(booking.getCity().getName());
         dto.setEventDate(booking.getEventDate());

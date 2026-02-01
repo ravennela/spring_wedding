@@ -1,13 +1,36 @@
 package com.example.online.catlog.dto;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class DecorationResponseDTO {
     private UUID id;
     private String title;
-    private double basePrice;
+    private BigDecimal basePrice;
     private String eventType;
     private String city;
+    private String description;
+    private String inclusions;
+    private String exclusions;
+    public String getInclusions() {
+        return inclusions;
+    }
+
+    
+    public String getExclusions() {
+        return exclusions;
+    }
+    public void setInclusions(String inclusions) {
+        this.inclusions = inclusions;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public UUID getId() {
         return id;
@@ -25,11 +48,11 @@ public class DecorationResponseDTO {
         this.title = title;
     }
 
-    public double getBasePrice() {
+    public BigDecimal getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(double basePrice) {
+    public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
@@ -47,6 +70,10 @@ public class DecorationResponseDTO {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public void setExclusions(String exclusions) {
+        this.exclusions = exclusions;
     }
 
 }

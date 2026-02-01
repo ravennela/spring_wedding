@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.online.auth.dto.SendOtpRequestDTO;
+import com.example.online.auth.dto.SendOtpResponse;
 import com.example.online.auth.dto.VerifyOtpRequestDTO;
 import com.example.online.auth.service.AuthService;
 
@@ -19,10 +20,10 @@ public class AuthController {
     }
 
     @PostMapping("/send-otp")
-    public ResponseEntity<Void> sendOtp(
+    public ResponseEntity<?> sendOtp(
             @RequestBody SendOtpRequestDTO request) {
-        authService.sendOtp(request.getMobileNumber());
-        return ResponseEntity.ok().build();
+       SendOtpResponse res= authService.sendOtp(request.getMobileNumber());
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/verify-otp")

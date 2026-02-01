@@ -57,17 +57,17 @@ public class CatalogDataLoader implements CommandLineRunner {
             return;
         }
 
-        EventType wedding = eventTypeRepository.findByName("Wedding")
-                .orElseThrow();
+        // EventType wedding = eventTypeRepository.findByName("Wedding")
+        //         .orElseThrow();
 
         City hyderabad = cityRepository.findByName("Hyderabad")
                 .orElseThrow();
 
         Decoration royalWedding = new Decoration();
-        royalWedding.setTitle("Royal Wedding Decoration");
+       // royalWedding.setTitle("Royal Wedding Decoration");
         royalWedding.setDescription("Premium stage, floral decor, lighting");
-        royalWedding.setBasePrice(75000);
-        royalWedding.setEventType(wedding);
+        //royalWedding.setBasePrice(75000);
+        //royalWedding.setEventType(wedding);
         royalWedding.setCity(hyderabad);
         royalWedding.setActive(true);
 

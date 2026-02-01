@@ -1,5 +1,6 @@
 package com.example.online.booking.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class BookingResponseDTO {
     private String city;
     private LocalDate eventDate;
     private BookingStatus status;
-    private double totalAmount;
+    private BigDecimal totalAmount;
     private LocalDateTime createdAt;
 
     // getters & setters
@@ -65,11 +66,11 @@ public class BookingResponseDTO {
         this.eventDate = eventDate;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 

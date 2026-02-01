@@ -17,4 +17,20 @@
         private String imageUrl;
 
         // getters & setters
+
+    public Decoration getDecoration() {
+        return decoration;
+    }
+
+    public void setDecoration(Decoration decoration) {
+        this.decoration = decoration;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     }

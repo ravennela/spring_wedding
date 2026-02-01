@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.example.online.common.enums.UserRole;
 import com.example.online.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
@@ -12,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByPhone(String mobileNumber);
 
     boolean existsByPhone(String mobileNumber);
+
+   Optional<User> findFirstByRole(UserRole role);
 }

@@ -1,5 +1,6 @@
 package com.example.online.event.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.example.online.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,15 +20,19 @@ import jakarta.persistence.Table;
 @Table(name = "decorations")
 public class Decoration extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "event_type_id")
     private EventType eventType;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "city_id")
     private City city;
+    
 
-    private String title;
+    @Column(nullable = false)
+    private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(columnDefinition = "TEXT")
@@ -35,11 +41,14 @@ public class Decoration extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String exclusions;
 
-    private double basePrice;
+    @Column(nullable = false)
+    private BigDecimal basePrice;
 
-    private boolean isActive = true;
+    @Column(nullable = false)
+    private boolean active = true;
 
     @ManyToOne
+    @JoinColumn(name = "created_by_admin_id")
     private User createdByAdmin;
 
     @OneToMany(
@@ -49,7 +58,17 @@ public class Decoration extends BaseEntity {
     )
     private List<DecorationImage> images = new ArrayList<>();
 
-    // -------- Getters & Setters --------
+    // getters & setters
+
+    public void addImage(DecorationImage image) {
+        images.add(image);
+        image.setDecoration(this);
+    }
+
+    public void removeImage(DecorationImage image) {
+        images.remove(image);
+        image.setDecoration(null);
+    }
 
     public EventType getEventType() {
         return eventType;
@@ -67,12 +86,12 @@ public class Decoration extends BaseEntity {
         this.city = city;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -99,20 +118,20 @@ public class Decoration extends BaseEntity {
         this.exclusions = exclusions;
     }
 
-    public double getBasePrice() {
+    public BigDecimal getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(double basePrice) {
+    public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public User getCreatedByAdmin() {

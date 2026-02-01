@@ -49,23 +49,23 @@ public class CatalogController {
 
     // ---------------- DECORATIONS ----------------
 
-    @GetMapping("/decorations")
-    public List<DecorationResponseDTO> getDecorations(
-            @RequestParam UUID eventTypeId,
-            @RequestParam UUID cityId) {
+    // @GetMapping("/decorations")
+    // public List<DecorationResponseDTO> getDecorations(
+    //         @RequestParam UUID eventTypeId,
+    //         @RequestParam UUID cityId) {
 
-        return decorationRepository
-                .findByEventTypeIdAndCityIdAndIsActiveTrue(eventTypeId, cityId)
-                .stream()
-                .map(decoration -> {
-                    DecorationResponseDTO dto = new DecorationResponseDTO();
-                    dto.setId(decoration.getId());
-                    dto.setTitle(decoration.getTitle());
-                    dto.setBasePrice(decoration.getBasePrice());
-                    dto.setEventType(decoration.getEventType().getName());
-                    dto.setCity(decoration.getCity().getName());
-                    return dto;
-                })
-                .toList();
-    }
+    //     return decorationRepository
+    //             .findByEventTypeIdAndCityIdAndIsActiveTrue(eventTypeId, cityId)
+    //             .stream()
+    //             .map(decoration -> {
+    //                 DecorationResponseDTO dto = new DecorationResponseDTO();
+    //                 dto.setId(decoration.getId());
+    //                 // dto.setTitle(decoration.getTitle());
+    //                 // dto.setBasePrice(decoration.getBasePrice());
+    //                 // dto.setEventType(decoration.getEventType().getName());
+    //                 // dto.setCity(decoration.getCity().getName());
+    //                 return dto;
+    //             })
+    //             .toList();
+    // }
 }

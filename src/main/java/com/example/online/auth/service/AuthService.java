@@ -7,6 +7,7 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import com.example.online.auth.dto.AuthResponseDTO;
+import com.example.online.auth.dto.SendOtpResponse;
 import com.example.online.auth.dto.VerifyOtpRequestDTO;
 import com.example.online.auth.entity.OtpVerification;
 import com.example.online.auth.repository.OtpVerificationRepository;
@@ -31,7 +32,7 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public void sendOtp(String phone) {
+    public SendOtpResponse sendOtp(String phone) {
         String otp = String.valueOf(100000 + new Random().nextInt(900000));
 
         OtpVerification otpEntity = new OtpVerification();
@@ -40,9 +41,9 @@ public class AuthService {
         otpEntity.setExpiresAt(LocalDateTime.now().plusMinutes(5));
 
         otpRepo.save(otpEntity);
-
-        // TODO: Integrate SMS provider
         System.out.println("OTP is: " + otp);
+        return new SendOtpResponse("OTP sent successfully", phone, otp);
+
     }
 
     public AuthResponseDTO verifyOtp(VerifyOtpRequestDTO request) {
@@ -71,8 +72,7 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(
                 user.getId().toString(),
-                user.getRole().name()
-        );
+                user.getRole().name());
 
         return new AuthResponseDTO(token, user.getRole().name());
     }
