@@ -17,7 +17,7 @@ public abstract class BaseEntity {
     @Id
     @UuidGenerator
     @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    public UUID id;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -46,5 +46,17 @@ public abstract class BaseEntity {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

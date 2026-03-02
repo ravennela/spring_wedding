@@ -1,5 +1,7 @@
 package com.example.online.event.repository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -37,4 +39,7 @@ public interface DecorationRepository extends JpaRepository<Decoration, UUID> {
             @Param("active") Boolean active,
             Pageable pageable
     );
+
+    Optional<Decoration> findById(UUID id);
+     List<Decoration> findTop5ByActiveTrueOrderByCreatedAtDesc();
 }

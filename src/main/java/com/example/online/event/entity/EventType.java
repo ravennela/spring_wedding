@@ -11,7 +11,8 @@ import jakarta.persistence.Table;
 public class EventType extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
-    private boolean isActive = true;
+    
+    private boolean isActive;
 
     @Column(length = 500)
     private String description;

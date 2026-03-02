@@ -3,6 +3,8 @@ package com.example.online.booking.dto;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.example.online.common.enums.PaymentMode;
+
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,6 +18,11 @@ public class BookingCreateRequestDTO {
 
     @NotNull
     private UUID decorationId;
+    @NotNull
+    private PaymentMode paymentMode;
+
+    @NotNull
+    private UUID addressId;
 
     @NotNull
     @Future
@@ -61,6 +68,22 @@ public class BookingCreateRequestDTO {
 
     public void setCustomerNote(String customerNote) {
         this.customerNote = customerNote;
+    }
+
+    public UUID getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(UUID addressId) {
+        this.addressId = addressId;
+    }
+
+    public PaymentMode getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(PaymentMode paymentMode) {
+        this.paymentMode = paymentMode;
     }
 
     

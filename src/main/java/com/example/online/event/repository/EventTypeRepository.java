@@ -22,4 +22,6 @@ public interface EventTypeRepository extends JpaRepository<EventType, UUID> {
         String name,
         Pageable pageable
     );
+    Optional<EventType> findByIdAndIsActiveTrue(UUID id);
+    
 }

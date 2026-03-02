@@ -4,11 +4,13 @@ import com.example.online.event.dto.CreateEventTypeRequest;
 import com.example.online.event.dto.EventTypeListItemResponse;
 import com.example.online.event.dto.EventTypeResponse;
 import com.example.online.event.dto.PagedResponse;
+import com.example.online.event.dto.UpdateEventTypeRequest;
 import com.example.online.event.entity.EventType;
 import com.example.online.event.service.EventTypeService;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +68,27 @@ public class EventTypeController {
                 eventTypePage.getTotalElements(),
                 eventTypePage.getTotalPages());
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEventType(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateEventTypeRequest request) {
+                System.out.println("Received update request for ID: " + request.isActive());
+
+        EventTypeResponse response = eventTypeService.updateEventType(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> inctivateEventType(@PathVariable UUID id) {
+        EventTypeResponse response = eventTypeService.inctivateEventType(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getEventTypeById(@PathVariable UUID id) {
+        EventTypeResponse response = eventTypeService.getEventTypeById(id);
+        return ResponseEntity.ok(response);             
     }
 }

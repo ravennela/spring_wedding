@@ -16,6 +16,8 @@ import com.example.online.user.entity.User;
 import com.example.online.user.repository.UserRepository;
 import com.example.online.utils.JwtUtil;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AuthService {
 
@@ -32,29 +34,45 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
+    @Transactional
     public SendOtpResponse sendOtp(String phone) {
+
         String otp = String.valueOf(100000 + new Random().nextInt(900000));
 
+        // ✅ delete immediately
+        otpRepo.deleteByPhone(phone);
+
         OtpVerification otpEntity = new OtpVerification();
+
         otpEntity.setPhone(phone);
         otpEntity.setOtp(otp);
-        otpEntity.setExpiresAt(LocalDateTime.now().plusMinutes(5));
+        otpEntity.setVerified(false);
+        otpEntity.setExpiresAt(
+                LocalDateTime.now().plusMinutes(5));
 
-        otpRepo.save(otpEntity);
+        otpRepo.saveAndFlush(otpEntity);
+
         System.out.println("OTP is: " + otp);
-        return new SendOtpResponse("OTP sent successfully", phone, otp);
 
+        return new SendOtpResponse(
+                "OTP sent successfully",
+                phone,
+                otp);
     }
 
+    @Transactional
     public AuthResponseDTO verifyOtp(VerifyOtpRequestDTO request) {
 
-        OtpVerification otp = otpRepo.findTopByPhoneOrderByCreatedAtDesc(request.getPhone())
+        OtpVerification otp = otpRepo.findFirstByPhoneOrderByCreatedAtDesc(request.getPhone())
                 .orElseThrow(() -> new RuntimeException("OTP not found"));
 
+        System.out.println("otp exp" + otp.getExpiresAt());
+        System.out.println("current" + LocalDateTime.now());
         if (otp.getExpiresAt().isBefore(LocalDateTime.now())) {
+            System.out.println("expired case");
             throw new RuntimeException("OTP expired");
         }
-
+        System.out.println("passed case");
         if (!otp.getOtp().equals(request.getOtp())) {
             throw new RuntimeException("Invalid OTP");
         }
@@ -74,6 +92,6 @@ public class AuthService {
                 user.getId().toString(),
                 user.getRole().name());
 
-        return new AuthResponseDTO(token, user.getRole().name());
+        return new AuthResponseDTO(token, user.getRole().name(), user.getId().toString(), user.getName());
     }
 }

@@ -6,11 +6,25 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.example.online.common.enums.BookingStatus;
+import com.example.online.common.enums.PaymentStatus;
 
 public class BookingResponseDTO {
 
-   private String bookingId;
+    private String bookingId;
     private String eventType;
+    private String decorationTitle;
+    private String city;
+    private LocalDate eventDate;
+    private BookingStatus status;
+    private PaymentStatus paymentStatus;
+    private BigDecimal totalAmount;
+    private LocalDateTime createdAt;
+
+    private String fullAddress;
+    private String customerNote;
+    private String razorpayOrderId;
+
+    // getters & setters
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -18,19 +32,43 @@ public class BookingResponseDTO {
         this.createdAt = createdAt;
     }
 
-    private String decorationTitle;
-    private String city;
-    private LocalDate eventDate;
-    private BookingStatus status;
-    private BigDecimal totalAmount;
-    private LocalDateTime createdAt;
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
 
-    // getters & setters
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+
+    public String getCustomerNote() {
+        return customerNote;
+    }
+
+    public void setCustomerNote(String customerNote) {
+        this.customerNote = customerNote;
+    }
+
+    public String getRazorpayOrderId() {
+        return razorpayOrderId;
+    }
+
+    public void setRazorpayOrderId(String razorpayOrderId) {
+        this.razorpayOrderId = razorpayOrderId;
+    }
 
     public String getBookingId() {
         return bookingId;
     }
-     public void setBookingId(String bookingId) {
+
+    public void setBookingId(String bookingId) {
         this.bookingId = bookingId;
     }
 
@@ -73,8 +111,6 @@ public class BookingResponseDTO {
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
-
-   
 
     public BookingStatus getStatus() {
         return status;

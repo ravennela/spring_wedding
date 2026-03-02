@@ -1,5 +1,7 @@
 package com.example.online.event.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.online.event.dto.CreateEventTypeRequest;
 import com.example.online.event.dto.EventTypeResponse;
+import com.example.online.event.dto.UpdateEventTypeRequest;
 import com.example.online.event.entity.EventType;
 import com.example.online.event.repository.EventTypeRepository;
 
@@ -19,7 +22,7 @@ import jakarta.transaction.Transactional;
 public class EventTypeServiceImpl implements EventTypeService {
 
     @Autowired
-    private  EventTypeRepository eventTypeRepository;
+    private EventTypeRepository eventTypeRepository;
 
     @Override
     public EventTypeResponse createEventType(CreateEventTypeRequest request) {
@@ -62,8 +65,7 @@ public class EventTypeServiceImpl implements EventTypeService {
             int size,
             String search,
             String sortBy,
-            String sortDir
-    ) {
+            String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -76,8 +78,41 @@ public class EventTypeServiceImpl implements EventTypeService {
 
         return eventTypeRepository.findByNameContainingIgnoreCase(
                 search.trim(),
-                pageable
-        );
+                pageable);
     }
-  
+
+    @Override
+    public EventTypeResponse updateEventType(UUID id, UpdateEventTypeRequest request) {
+        EventType eventType = eventTypeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Event type not found"));
+        eventType.setName(request.getName());
+        eventType.setDescription(request.getDescription());
+        eventType.setIconUrl(request.getImageUrl());
+        System.out.println("Setting isActive to: " + request.isActive());
+        eventType.setActive(request.isActive());
+
+        EventType updated = eventTypeRepository.save(eventType);
+
+        return mapToResponse(updated);
+    }
+
+    @Override
+    public EventTypeResponse inctivateEventType(UUID id) {
+        EventType eventType = eventTypeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Event type not found"));
+        eventType.setActive(false);
+        EventType updated = eventTypeRepository.save(eventType);
+
+        return mapToResponse(updated);
+    }
+
+    @Override
+    public EventTypeResponse getEventTypeById(UUID id) {
+
+        EventType eventType = eventTypeRepository
+                .findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new IllegalArgumentException("Event type not found"));
+
+        return mapToResponse(eventType);
+    }
 }

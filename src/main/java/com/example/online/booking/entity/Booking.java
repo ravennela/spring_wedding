@@ -3,8 +3,11 @@ package com.example.online.booking.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.example.online.address.entity.Address;
 import com.example.online.common.entity.BaseEntity;
 import com.example.online.common.enums.BookingStatus;
+import com.example.online.common.enums.PaymentMode;
+import com.example.online.common.enums.PaymentStatus;
 import com.example.online.event.entity.Decoration;
 import com.example.online.event.entity.EventType;
 import com.example.online.location.enitity.City;
@@ -63,8 +66,45 @@ public class Booking extends BaseEntity {
     @Column(name = "booking_code")
     private String bookingCode;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_mode", length = 20)
+    private PaymentMode paymentMode;
+
+    // 💰 Payment status (INITIATED / SUCCESS / FAILED / REFUNDED)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status", length = 30, nullable = false)
+    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+
+    // Razorpay order id (for ONLINE only)
+    @Column(name = "razorpay_order_id", unique = true)
+    private String razorpayOrderId;
+
+    // Razorpay payment id (after success)
+    @Column(name = "razorpay_payment_id")
+    private String razorpayPaymentId;
+
     @Column(name = "advance_amount")
-    private BigDecimal  advanceAmount;
+    private BigDecimal advanceAmount;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    public String getBookingCode() {
+        return bookingCode;
+    }
+
+    public void setBookingCode(String bookingCode) {
+        this.bookingCode = bookingCode;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public User getCustomer() {
         return customer;
@@ -134,16 +174,48 @@ public class Booking extends BaseEntity {
         return totalAmount;
     }
 
-    public void setTotalAmount(BigDecimal  totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public BigDecimal  getAdvanceAmount() {
+    public BigDecimal getAdvanceAmount() {
         return advanceAmount;
     }
 
-    public void setAdvanceAmount(BigDecimal  advanceAmount) {
+    public void setAdvanceAmount(BigDecimal advanceAmount) {
         this.advanceAmount = advanceAmount;
+    }
+
+    public PaymentMode getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(PaymentMode paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getRazorpayOrderId() {
+        return razorpayOrderId;
+    }
+
+    public void setRazorpayOrderId(String razorpayOrderId) {
+        this.razorpayOrderId = razorpayOrderId;
+    }
+
+    public String getRazorpayPaymentId() {
+        return razorpayPaymentId;
+    }
+
+    public void setRazorpayPaymentId(String razorpayPaymentId) {
+        this.razorpayPaymentId = razorpayPaymentId;
     }
 
     // -------- getters & setters ----------
