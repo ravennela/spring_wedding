@@ -8,7 +8,7 @@ import java.util.UUID;
 import com.example.online.common.enums.BookingStatus;
 import com.example.online.common.enums.PaymentStatus;
 
-public class BookingResponseDTO {
+public class BookingResponseDto {
 
     private String bookingId;
     private String eventType;
@@ -120,3 +120,6 @@ public class BookingResponseDTO {
         this.status = status;
     }
 }
+
+
+

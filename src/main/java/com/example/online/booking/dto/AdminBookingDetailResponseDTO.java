@@ -9,7 +9,7 @@ import com.example.online.common.enums.BookingStatus;
 import com.example.online.common.enums.PaymentMode;
 import com.example.online.common.enums.PaymentStatus;
 
-public class AdminBookingDetailResponseDTO {
+public class AdminBookingDetailResponseDto {
     private UUID bookingId;
     private String bookingCode;
 
@@ -38,6 +38,7 @@ public class AdminBookingDetailResponseDTO {
 
     // Vendor
     private String vendorName;
+    private UUID vendorId;
 
     // Notes
     private String customerNote;
@@ -173,6 +174,14 @@ public class AdminBookingDetailResponseDTO {
         this.vendorName = vendorName;
     }
 
+    public UUID getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(UUID vendorId) {
+        this.vendorId = vendorId;
+    }
+
     public String getCustomerNote() {
         return customerNote;
     }
@@ -190,3 +199,8 @@ public class AdminBookingDetailResponseDTO {
     }
     
 }
+
+
+
+
+

@@ -19,3 +19,4 @@ public class PublicHomeController {
         return homeService.getHomeData();
     }
 }
+

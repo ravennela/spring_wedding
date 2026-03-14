@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-import com.example.online.catlog.dto.DecorationResponseDTO;
+import com.example.online.catalog.dto.DecorationResponseDto;
 import com.example.online.common.enums.UserRole;
 import com.example.online.event.dto.CreateDecorationRequest;
 import com.example.online.event.dto.DecorationResponse;
@@ -15,7 +15,7 @@ import com.example.online.event.entity.DecorationImage;
 import com.example.online.event.entity.EventType;
 import com.example.online.event.repository.DecorationRepository;
 import com.example.online.event.repository.EventTypeRepository;
-import com.example.online.location.enitity.City;
+import com.example.online.location.entity.City;
 import com.example.online.location.repository.CityRepository;
 import com.example.online.user.entity.User;
 import com.example.online.user.repository.UserRepository;
@@ -37,7 +37,7 @@ public class DecorationServiceImpl implements DecorationService {
         private UserRepository userRepository;
 
         @Override
-        public DecorationResponseDTO createDecoration(CreateDecorationRequest request) {
+        public DecorationResponseDto createDecoration(CreateDecorationRequest request) {
 
                 // 1️⃣ Fetch EventType
                 EventType eventType = eventTypeRepository.findById(
@@ -81,14 +81,14 @@ public class DecorationServiceImpl implements DecorationService {
                 // 6️⃣ Save
                 Decoration saved = decorationRepository.save(decoration);
 
-                DecorationResponseDTO responseDTO = new DecorationResponseDTO();
-                responseDTO.setId(saved.getId());
-                responseDTO.setTitle(saved.getName());
-                responseDTO.setDescription(saved.getDescription());
-                responseDTO.setBasePrice(saved.getBasePrice());
-                responseDTO.setInclusions(saved.getInclusions());
+                DecorationResponseDto responseDto = new DecorationResponseDto();
+                responseDto.setId(saved.getId());
+                responseDto.setTitle(saved.getName());
+                responseDto.setDescription(saved.getDescription());
+                responseDto.setBasePrice(saved.getBasePrice());
+                responseDto.setInclusions(saved.getInclusions());
 
-                return responseDTO;
+                return responseDto;
         }
 
         @Override

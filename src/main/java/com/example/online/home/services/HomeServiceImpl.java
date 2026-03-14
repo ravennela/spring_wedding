@@ -78,15 +78,16 @@ public class HomeServiceImpl implements HomeService {
                                 null);
 
                 // 5. Featured event (static for now)
-                List<FeaturedEventDto> featuredEvent =List.of(new FeaturedEventDto(
+                List<FeaturedEventDto> featuredEvent = List.of(new FeaturedEventDto(
                                 null,
                                 "The Royal Wedding",
                                 "Elegant Palaces & Premium Decor",
-                                null),new FeaturedEventDto(
-                                null,
-                                "Birthday",
-                                "Premium decorations for Birthday",
-                                null));
+                                null),
+                                new FeaturedEventDto(
+                                                null,
+                                                "Birthday",
+                                                "Premium decorations for Birthday",
+                                                null));
 
                 // 6. Real celebrations (static for now)
                 List<CelebrationItemDto> celebrations = List.of(

@@ -6,15 +6,15 @@ import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
-import com.example.online.auth.dto.AuthResponseDTO;
+import com.example.online.auth.dto.AuthResponseDto;
 import com.example.online.auth.dto.SendOtpResponse;
-import com.example.online.auth.dto.VerifyOtpRequestDTO;
+import com.example.online.auth.dto.VerifyOtpRequestDto;
 import com.example.online.auth.entity.OtpVerification;
 import com.example.online.auth.repository.OtpVerificationRepository;
 import com.example.online.common.enums.UserRole;
 import com.example.online.user.entity.User;
 import com.example.online.user.repository.UserRepository;
-import com.example.online.utils.JwtUtil;
+import com.example.online.auth.util.JwtUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -61,7 +61,7 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthResponseDTO verifyOtp(VerifyOtpRequestDTO request) {
+    public AuthResponseDto verifyOtp(VerifyOtpRequestDto request) {
 
         OtpVerification otp = otpRepo.findFirstByPhoneOrderByCreatedAtDesc(request.getPhone())
                 .orElseThrow(() -> new RuntimeException("OTP not found"));
@@ -84,14 +84,19 @@ public class AuthService {
                 .orElseGet(() -> {
                     User u = new User();
                     u.setPhone(request.getPhone());
-                    u.setRole(UserRole.CUSTOMER);
+                    u.setRole(request.getRole() != null ? request.getRole() : UserRole.CUSTOMER);
                     return userRepo.save(u);
                 });
 
+        // 🔥 update role if provided
+        if (request.getRole() != null && user.getRole() != request.getRole()) {
+            user.setRole(request.getRole());
+            userRepo.save(user);
+        }
         String token = jwtUtil.generateToken(
                 user.getId().toString(),
                 user.getRole().name());
 
-        return new AuthResponseDTO(token, user.getRole().name(), user.getId().toString(), user.getName());
+        return new AuthResponseDto(token, user.getRole().name(), user.getId().toString(), user.getName());
     }
 }

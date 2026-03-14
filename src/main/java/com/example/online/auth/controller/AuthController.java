@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.online.auth.dto.SendOtpRequestDTO;
+import com.example.online.auth.dto.SendOtpRequestDto;
 import com.example.online.auth.dto.SendOtpResponse;
-import com.example.online.auth.dto.VerifyOtpRequestDTO;
+import com.example.online.auth.dto.VerifyOtpRequestDto;
 import com.example.online.auth.service.AuthService;
 
 @RestController
@@ -24,14 +24,14 @@ public class AuthController {
 
     @PostMapping("/send-otp")
     public ResponseEntity<?> sendOtp(
-            @RequestBody SendOtpRequestDTO request) {
-       SendOtpResponse res= authService.sendOtp(request.getMobileNumber());
+            @RequestBody SendOtpRequestDto request) {
+        SendOtpResponse res = authService.sendOtp(request.getMobileNumber());
         return ResponseEntity.ok(res);
     }
 
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(
-            @RequestBody VerifyOtpRequestDTO request) {
+            @RequestBody VerifyOtpRequestDto request) {
         return ResponseEntity.ok(authService.verifyOtp(request));
     }
 }

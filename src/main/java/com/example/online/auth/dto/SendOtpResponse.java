@@ -30,3 +30,4 @@ public class SendOtpResponse {
         this.otp = otp;
     }
 }
+

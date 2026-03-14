@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.online.common.entity.BaseEntity;
-import com.example.online.location.enitity.City;
+import com.example.online.location.entity.City;
 import com.example.online.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -150,3 +150,4 @@ public class Decoration extends BaseEntity {
         this.images = images;
     }
 }
+

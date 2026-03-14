@@ -2,6 +2,7 @@ package com.example.online.booking.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.example.online.address.entity.Address;
 import com.example.online.common.entity.BaseEntity;
@@ -10,7 +11,7 @@ import com.example.online.common.enums.PaymentMode;
 import com.example.online.common.enums.PaymentStatus;
 import com.example.online.event.entity.Decoration;
 import com.example.online.event.entity.EventType;
-import com.example.online.location.enitity.City;
+import com.example.online.location.entity.City;
 import com.example.online.user.entity.User;
 
 import jakarta.persistence.Column;
@@ -32,6 +33,15 @@ public class Booking extends BaseEntity {
     // 🎉 Event type (Wedding, Birthday, etc.)
     @ManyToOne(optional = false)
     private EventType eventType;
+
+    @Column(name = "cancel_reason")
+    private String cancelReason;
+
+    @Column(name = "cancelled_by")
+    private String cancelledBy; // "ADMIN" or "USER"
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
 
     // 🏙️ City of event
     @ManyToOne(optional = false)
@@ -116,6 +126,31 @@ public class Booking extends BaseEntity {
 
     public EventType getEventType() {
         return eventType;
+    }
+    
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public String getCancelledBy() {
+        return cancelledBy;
+    }
+
+    public void setCancelledBy(String cancelledBy) {
+        this.cancelledBy = cancelledBy;
+    }
+
+    public LocalDateTime getCancelledAt() {
+        return cancelledAt;
+    }
+
+    public void setCancelledAt(LocalDateTime cancelledAt) {
+        this.cancelledAt = cancelledAt;
     }
 
     public void setEventType(EventType eventType) {
@@ -221,3 +256,4 @@ public class Booking extends BaseEntity {
     // -------- getters & setters ----------
 
 }
+

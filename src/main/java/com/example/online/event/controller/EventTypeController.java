@@ -92,3 +92,4 @@ public class EventTypeController {
         return ResponseEntity.ok(response);             
     }
 }
+

@@ -57,7 +57,6 @@ public class AddressController {
         addressService.deleteAddress(id);
 
         return ResponseEntity.ok(
-        Map.of("message", "Address deleted successfully")
-    );
+                Map.of("message", "Address deleted successfully"));
     }
 }

@@ -25,3 +25,4 @@ public interface EventTypeService {
     EventTypeResponse inctivateEventType(UUID id);
     EventTypeResponse getEventTypeById(UUID id);
 }
+

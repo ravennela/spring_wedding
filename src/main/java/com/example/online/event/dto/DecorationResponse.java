@@ -88,3 +88,4 @@ public class DecorationResponse {
         return eventTypeName;
     }
 }
+

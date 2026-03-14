@@ -8,13 +8,20 @@ import com.example.online.common.enums.PaymentMode;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 
-public class BookingCreateRequestDTO {
+public class BookingCreateRequestDto {
 
     @NotNull
     private UUID eventTypeId;
 
     @NotNull
     private UUID cityId;
+
+    @Override
+    public String toString() {
+        return "BookingCreateRequestDto [eventTypeId=" + eventTypeId + ", cityId=" + cityId + ", decorationId="
+                + decorationId + ", paymentMode=" + paymentMode + ", addressId=" + addressId + ", eventDate="
+                + eventDate + ", customerNote=" + customerNote + "]";
+    }
 
     @NotNull
     private UUID decorationId;
@@ -24,8 +31,6 @@ public class BookingCreateRequestDTO {
     @NotNull
     private UUID addressId;
 
-    @NotNull
-    @Future
     private LocalDate eventDate;
 
     private String customerNote;
@@ -88,3 +93,6 @@ public class BookingCreateRequestDTO {
 
     
 }
+
+
+

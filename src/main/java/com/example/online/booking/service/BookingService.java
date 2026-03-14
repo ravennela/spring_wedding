@@ -6,36 +6,21 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.example.online.booking.dto.AdminBookingDetailResponseDTO;
-import com.example.online.booking.dto.AdminBookingFilterRequest;
-import com.example.online.booking.dto.AdminBookingListResponseDTO;
-import com.example.online.booking.dto.BookingCreateRequestDTO;
-import com.example.online.booking.dto.BookingDetailsResponseDTO;
-import com.example.online.booking.dto.BookingResponseDTO;
+import com.example.online.booking.dto.BookingCreateRequestDto;
+import com.example.online.booking.dto.BookingDetailsResponseDto;
+import com.example.online.booking.dto.BookingResponseDto;
 import com.example.online.booking.entity.Booking;
-import com.example.online.common.enums.BookingStatus;
-import com.example.online.common.enums.PaymentStatus;
 import com.example.online.user.entity.User;
 
 public interface BookingService {
 
-    BookingResponseDTO createBooking(BookingCreateRequestDTO request);
+        BookingResponseDto createBooking(BookingCreateRequestDto request);
 
-    List<Booking> getMyBookings(User customer);
+        Page<BookingResponseDto> getAllMyBookings(Pageable pageable);
 
-    void assignVendor(Long bookingId, Long vendorId);
+        BookingDetailsResponseDto getBookingDetails(UUID bookingId);
 
-    Page<BookingResponseDTO> getAllMyBookings(Pageable pageable);
-
-    BookingDetailsResponseDTO getBookingDetails(UUID bookingId);
-
-    void cancelBooking(UUID bookingId);
-
-    Page<AdminBookingListResponseDTO> getAllBookingsForAdmin(
-            AdminBookingFilterRequest filter,
-            Pageable pageable);
-
-    AdminBookingDetailResponseDTO getBookingDetailsForAdmin(UUID bookingId);
-
-    void updateBookingStatus(UUID bookingId, BookingStatus newStatus);
+        void cancelBooking(UUID bookingId);
 }
+
+

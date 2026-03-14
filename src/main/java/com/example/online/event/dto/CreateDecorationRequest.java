@@ -62,3 +62,4 @@ public class CreateDecorationRequest {
         return active;
     }
 }
+

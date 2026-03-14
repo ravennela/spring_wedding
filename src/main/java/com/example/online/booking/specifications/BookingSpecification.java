@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.example.online.booking.dto.AdminBookingFilterRequest;
 import com.example.online.booking.entity.Booking;
-import com.example.online.location.enitity.City;
+import com.example.online.location.entity.City;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -41,3 +41,8 @@ public class BookingSpecification {
         };
     }
 }
+
+
+
+
+

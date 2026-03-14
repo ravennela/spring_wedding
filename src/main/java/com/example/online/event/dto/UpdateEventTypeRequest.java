@@ -39,3 +39,4 @@ public class UpdateEventTypeRequest {
         this.active = active;
     }
 }
+

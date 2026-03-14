@@ -18,6 +18,7 @@ public interface DecorationRepository extends JpaRepository<Decoration, UUID> {
             UUID cityId,
             Pageable pageable
     );
+ 
 
     Page<Decoration> findByEventTypeIdAndCityIdAndActiveTrue(
             UUID eventTypeId,

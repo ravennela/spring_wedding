@@ -9,3 +9,4 @@ public interface CityService {
 
     Page<CityResponse> getCities(String search, Pageable pageable);
 }
+

@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.example.online.common.enums.BookingStatus;
 import com.example.online.common.enums.PaymentStatus;
 
-public class AdminBookingListResponseDTO {
+public class AdminBookingListResponseDto {
     private UUID bookingId;
     private String userName;
     private String eventType;
@@ -66,3 +66,8 @@ public class AdminBookingListResponseDTO {
     }
     
 }
+
+
+
+
+

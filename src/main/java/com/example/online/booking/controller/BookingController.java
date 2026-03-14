@@ -16,9 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.online.booking.dto.BookingCreateRequestDTO;
-import com.example.online.booking.dto.BookingDetailsResponseDTO;
-import com.example.online.booking.dto.BookingResponseDTO;
+import com.example.online.booking.dto.BookingCreateRequestDto;
+import com.example.online.booking.dto.BookingDetailsResponseDto;
+import com.example.online.booking.dto.BookingResponseDto;
 import com.example.online.booking.service.BookingService;
 
 @RestController
@@ -29,8 +29,8 @@ public class BookingController {
 
         @PostMapping
         @PreAuthorize("hasRole('CUSTOMER')")
-        public ResponseEntity<BookingResponseDTO> createBooking(
-                        @Valid @RequestBody BookingCreateRequestDTO request) {
+        public ResponseEntity<BookingResponseDto> createBooking(
+                        @Valid @RequestBody BookingCreateRequestDto request) {
                 System.out.println("Received booking request: " + request);
 
                 return new ResponseEntity<>(
@@ -40,7 +40,7 @@ public class BookingController {
 
         @GetMapping("/my")
         @PreAuthorize("hasRole('CUSTOMER')")
-        public ResponseEntity<Page<BookingResponseDTO>> getMyBookings(
+        public ResponseEntity<Page<BookingResponseDto>> getMyBookings(
                         @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
 
                 return ResponseEntity.ok(
@@ -49,7 +49,7 @@ public class BookingController {
 
         @GetMapping("/{bookingId}")
         @PreAuthorize("hasRole('CUSTOMER')")
-        public ResponseEntity<BookingDetailsResponseDTO> getBookingDetails(
+        public ResponseEntity<BookingDetailsResponseDto> getBookingDetails(
                         @PathVariable UUID bookingId) {
                 return ResponseEntity.ok(
                                 bookingService.getBookingDetails(bookingId));
@@ -69,3 +69,6 @@ public class BookingController {
                 return ResponseEntity.ok(response);
         }
 }
+
+
+

@@ -1,6 +1,6 @@
 package com.example.online.booking.dto;
 
-public class CityDTO {
+public class CityDto {
     private String id;
     private String name;
     public String getId() {
@@ -17,3 +17,6 @@ public class CityDTO {
     }
 
 }
+
+
+

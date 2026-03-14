@@ -3,7 +3,7 @@ package com.example.online.booking.dto;
 import com.example.online.common.enums.PaymentMode;
 import com.example.online.common.enums.PaymentStatus;
 
-public class PaymentDTO {
+public class PaymentDto {
     private String razorpayOrderId;
     private String razorpayPaymentId;
     private PaymentStatus paymentStatus;
@@ -34,3 +34,6 @@ public class PaymentDTO {
         this.paymentMode = paymentMode;
     }
 }
+
+
+

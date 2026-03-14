@@ -1,6 +1,6 @@
 package com.example.online.auth.dto;
 
-public class SendOtpRequestDTO {
+public class SendOtpRequestDto {
 
     private String mobileNumber;
 

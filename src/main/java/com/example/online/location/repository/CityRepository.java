@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.online.location.enitity.City;
+import com.example.online.location.entity.City;
 
 public interface CityRepository extends JpaRepository<City, UUID> {
 
@@ -17,3 +17,4 @@ public interface CityRepository extends JpaRepository<City, UUID> {
 
     Page<City> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }
+

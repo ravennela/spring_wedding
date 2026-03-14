@@ -4,7 +4,7 @@ import com.example.online.common.enums.BookingStatus;
 
 import jakarta.validation.constraints.NotNull;
 
-public class UpdateBookingStatusRequestDTO {
+public class UpdateBookingStatusRequestDto {
    @NotNull(message = "Status is required")
     private BookingStatus status;
 
@@ -16,3 +16,8 @@ public class UpdateBookingStatusRequestDTO {
         this.status = status;
     } 
 }
+
+
+
+
+

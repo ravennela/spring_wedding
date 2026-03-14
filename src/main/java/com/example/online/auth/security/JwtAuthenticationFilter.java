@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.online.utils.CustomUserDetailsService;
-import com.example.online.utils.JwtUtil;
+import com.example.online.auth.security.CustomUserDetailsService;
+import com.example.online.auth.util.JwtUtil;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;

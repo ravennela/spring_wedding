@@ -10,7 +10,7 @@ import com.example.online.common.enums.PaymentMode;
 import com.example.online.common.enums.PaymentStatus;
 import com.razorpay.Payment;
 
-public class BookingDetailsResponseDTO {
+public class BookingDetailsResponseDto {
     private String bookingId;
 
     // HERO
@@ -31,8 +31,8 @@ public class BookingDetailsResponseDTO {
     // ADDRESS
 
     // PAYMENT
-    private PaymentDTO payment;
-    private AddressDTO address;
+    private PaymentDto payment;
+    private AddressDto address;
 
     public String getBookingId() {
         return bookingId;
@@ -114,20 +114,23 @@ public class BookingDetailsResponseDTO {
         this.guestCount = guestCount;
     }
 
-    public AddressDTO getAddress() {
+    public AddressDto getAddress() {
         return address;
     }
 
-    public void setAddress(AddressDTO address) {
+    public void setAddress(AddressDto address) {
         this.address = address;
     }
 
-    public PaymentDTO getPayment() {
+    public PaymentDto getPayment() {
         return payment;
     }
 
-    public void setPayment(PaymentDTO payment) {
+    public void setPayment(PaymentDto payment) {
         this.payment = payment;
     }
 
 }
+
+
+

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
-import com.example.online.catlog.dto.DecorationResponseDTO;
+import com.example.online.catalog.dto.DecorationResponseDto;
 import com.example.online.event.dto.CreateDecorationRequest;
 
 import com.example.online.event.dto.PagedResponse;
@@ -33,7 +33,7 @@ public class DecorationController {
         @PostMapping
         public ResponseEntity<?> createDecoration(
                         @RequestBody CreateDecorationRequest request) {
-                DecorationResponseDTO response = decorationService.createDecoration(request);
+                DecorationResponseDto response = decorationService.createDecoration(request);
 
                 return ResponseEntity.ok(response);
         }

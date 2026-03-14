@@ -1,4 +1,5 @@
 package com.example.online.home.dto;
+
 import java.util.List;
 
 public class HomeResponse {
@@ -19,41 +20,53 @@ public class HomeResponse {
         this.realCelebrations = realCelebrations;
         this.trendingDecorations = trendingDecorations;
     }
+
     public HeroSectionDto getHero() {
         return hero;
     }
+
     public void setHero(HeroSectionDto hero) {
         this.hero = hero;
     }
+
     public List<CategoryItemDto> getCategories() {
         return categories;
     }
+
     public void setCategories(List<CategoryItemDto> categories) {
         this.categories = categories;
-    }   
+    }
+
     public List<ServiceItemDto> getServices() {
         return services;
     }
+
     public void setServices(List<ServiceItemDto> services) {
         this.services = services;
     }
+
     public List<FeaturedEventDto> getFeaturedEvent() {
         return featuredEvent;
     }
+
     public void setFeaturedEvent(List<FeaturedEventDto> featuredEvent) {
         this.featuredEvent = featuredEvent;
     }
+
     public List<CelebrationItemDto> getRealCelebrations() {
         return realCelebrations;
     }
+
     public void setRealCelebrations(List<CelebrationItemDto> realCelebrations) {
         this.realCelebrations = realCelebrations;
     }
+
     public List<DecorationCardDto> getTrendingDecorations() {
         return trendingDecorations;
     }
+
     public void setTrendingDecorations(List<DecorationCardDto> trendingDecorations) {
         this.trendingDecorations = trendingDecorations;
     }
-    
+
 }

@@ -1,6 +1,6 @@
 package com.example.online.booking.dto;
 
-public class AddressDTO {
+public class AddressDto {
     private String venueName;
     private String fullAddress;
     private String city;
@@ -38,3 +38,6 @@ public class AddressDTO {
     }
     
 }
+
+
+

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.online.location.dto.CityResponse;
-import com.example.online.location.enitity.City;
+import com.example.online.location.entity.City;
 import com.example.online.location.repository.CityRepository;
 
 
@@ -33,3 +33,5 @@ public class CityServiceImpl implements CityService {
         );
     }
 }
+
+
