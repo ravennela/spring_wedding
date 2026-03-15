@@ -15,8 +15,21 @@ public class CreateEventTypeRequest {
 
     private String iconUrl;
 
-    private Integer sortOrder;
+    private String iconPublicId;
+    
 
+    private Integer sortOrder;
+    
+
+    public String getIconPublicId() {
+        return iconPublicId;
+    }
+    public void setIconPublicId(String iconPublicId) {
+        this.iconPublicId = iconPublicId;
+    }
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
+    }
     // getters & setters
     public String getName() {
         return name;

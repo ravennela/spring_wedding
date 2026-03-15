@@ -12,6 +12,8 @@ public class EventTypeListItemResponse {
     private String name;
     private String description;
     private boolean active;
+    private String iconUrl;
+    private String iconPublicId;
     private LocalDateTime createdAt;
 
     public EventTypeListItemResponse(
@@ -35,6 +37,14 @@ public class EventTypeListItemResponse {
     public String getName() {
         return name;
     }
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public String getIconPublicId() {
+        return iconPublicId;
+    }
+    
 
     public String getDescription() {
         return description;

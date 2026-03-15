@@ -27,7 +27,7 @@ public class EventServiceImpl implements EventService {
                 .map(event -> new PublicEventTypeDto(
                         event.getId(),
                         event.getName(),
-                        null // imageUrl (add when image support is implemented)
+                        event.getIconUrl() // imageUrl (add when image support is implemented)
                 ))
                 .collect(Collectors.toList());
     }

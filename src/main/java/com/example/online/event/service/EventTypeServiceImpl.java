@@ -38,6 +38,7 @@ public class EventTypeServiceImpl implements EventTypeService {
         eventType.setName(request.getName());
         eventType.setDescription(request.getDescription());
         eventType.setIconUrl(request.getIconUrl());
+        eventType.setIconPublicId(request.getIconPublicId());
         eventType.setSortOrder(request.getSortOrder());
         eventType.setActive(true);
 

@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 public class EventType extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
-    
+
     private boolean isActive;
 
     @Column(length = 500)
@@ -22,25 +22,39 @@ public class EventType extends BaseEntity {
     @Column(name = "sort_order")
     private Integer sortOrder;
 
+    @Column(name = "icon_public_id")
+    private String iconPublicId;
+
+    public String getIconPublicId() {
+        return iconPublicId;
+    }
+    public void setIconPublicId(String iconPublicId) {
+        this.iconPublicId = iconPublicId;
+    }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getIconUrl() {
         return iconUrl;
     }
+
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
     }
+
     public Integer getSortOrder() {
         return sortOrder;
     }
+
     public void setSortOrder(Integer sortOrder) {
         this.sortOrder = sortOrder;
     }
-    
 
     public String getName() {
         return name;

@@ -38,7 +38,7 @@ public class HomeServiceImpl implements HomeService {
                                                 event.getId(),
                                                 event.getName(),
                                                 "default_icon",
-                                                null))
+                                                event.getIconUrl()))
                                 .collect(Collectors.toList());
 
                 // 2. Fetch trending decorations
