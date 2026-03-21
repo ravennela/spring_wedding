@@ -12,7 +12,7 @@ import com.example.online.event.entity.EventType;
 
 public interface EventTypeRepository extends JpaRepository<EventType, UUID> {
 
-    List<EventType> findByIsActiveTrue();
+    List<EventType> findByIsActive(boolean active);
 
     boolean existsByNameIgnoreCase(String name);
 

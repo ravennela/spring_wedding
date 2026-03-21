@@ -19,9 +19,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<PublicEventTypeDto> getAllEventTypes() {
+    public List<PublicEventTypeDto> getAllEventTypes(Boolean active) {
 
-        List<EventType> eventTypes = eventTypeRepository.findByIsActiveTrue();
+        List<EventType> eventTypes = eventTypeRepository.findByIsActive(active != null ? active : true  );
 
         return eventTypes.stream()
                 .map(event -> new PublicEventTypeDto(

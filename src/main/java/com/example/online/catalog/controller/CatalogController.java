@@ -36,8 +36,14 @@ public class CatalogController {
     // ---------------- EVENT TYPES ----------------
 
     @GetMapping("/event-types")
-    public List<EventType> getEventTypes() {
-        return eventTypeRepository.findByIsActiveTrue();
+    public List<EventType> getEventTypes(
+            @RequestParam(required = false) Boolean active) {
+
+        if (active == null) {
+            return eventTypeRepository.findAll();
+        }
+
+        return eventTypeRepository.findByIsActive(active);
     }
 
     // ---------------- CITIES ----------------

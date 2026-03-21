@@ -4,5 +4,5 @@ import com.example.online.home.dto.HomeResponse;
 
 public interface HomeService {
 
-    HomeResponse getHomeData();
+    HomeResponse getHomeData(Boolean active);
 }

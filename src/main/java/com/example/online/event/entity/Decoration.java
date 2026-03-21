@@ -70,6 +70,12 @@ public class Decoration extends BaseEntity {
         image.setDecoration(null);
     }
 
+    public void clearImages() {
+        for (DecorationImage img : new java.util.ArrayList<>(images)) {
+            removeImage(img);
+        }
+    }
+
     public EventType getEventType() {
         return eventType;
     }

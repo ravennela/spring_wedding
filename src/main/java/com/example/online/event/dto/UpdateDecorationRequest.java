@@ -1,9 +1,16 @@
 package com.example.online.event.dto;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.UUID;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateDecorationRequest {
 
     @NotBlank
@@ -23,6 +30,12 @@ public class UpdateDecorationRequest {
     private UUID eventTypeId;
 
     private boolean active;
+
+    /**
+     * When non-null, replaces all decoration_images for this decoration.
+     * Empty list clears images. Null = leave images unchanged (backward compatible).
+     */
+    private List<DecorationImageRequest> images;
 
     // getters & setters
 
@@ -88,5 +101,13 @@ public class UpdateDecorationRequest {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<DecorationImageRequest> getImages() {
+        return images;
+    }
+
+    public void setImages(List<DecorationImageRequest> images) {
+        this.images = images;
     }
 }

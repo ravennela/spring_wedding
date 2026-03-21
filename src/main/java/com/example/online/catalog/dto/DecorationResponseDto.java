@@ -1,6 +1,8 @@
 package com.example.online.catalog.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DecorationResponseDto {
@@ -12,6 +14,7 @@ public class DecorationResponseDto {
     private String description;
     private String inclusions;
     private String exclusions;
+    private List<String> imageUrls = new ArrayList<>();
 
     public String getInclusions() {
         return inclusions;
@@ -75,6 +78,14 @@ public class DecorationResponseDto {
 
     public void setExclusions(String exclusions) {
         this.exclusions = exclusions;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls != null ? imageUrls : new ArrayList<>();
     }
 
 }

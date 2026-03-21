@@ -2,12 +2,17 @@ package com.example.online.user.entity;
 
 import com.example.online.common.entity.BaseEntity;
 import com.example.online.common.enums.UserRole;
+import com.example.online.location.entity.City;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
@@ -18,6 +23,29 @@ public class User extends BaseEntity {
     private String phone;
 
     private String email;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
+    private City city;
+    
+
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean isVerified) {
+        this.isVerified = isVerified;
+    }
 
     public String getName() {
         return name;
@@ -65,5 +93,5 @@ public class User extends BaseEntity {
     private boolean isActive = true;
 
     @Column(nullable = false)
-    private boolean isVerified = false; 
+    private boolean isVerified = false;
 }

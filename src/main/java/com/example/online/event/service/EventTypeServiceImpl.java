@@ -88,7 +88,8 @@ public class EventTypeServiceImpl implements EventTypeService {
                 .orElseThrow(() -> new IllegalArgumentException("Event type not found"));
         eventType.setName(request.getName());
         eventType.setDescription(request.getDescription());
-        eventType.setIconUrl(request.getImageUrl());
+        eventType.setIconUrl(request.getIconUrl());
+        eventType.setIconPublicId(request.getIconPublicId());
         System.out.println("Setting isActive to: " + request.isActive());
         eventType.setActive(request.isActive());
 
@@ -111,7 +112,7 @@ public class EventTypeServiceImpl implements EventTypeService {
     public EventTypeResponse getEventTypeById(UUID id) {
 
         EventType eventType = eventTypeRepository
-                .findByIdAndIsActiveTrue(id)
+                .findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Event type not found"));
 
         return mapToResponse(eventType);

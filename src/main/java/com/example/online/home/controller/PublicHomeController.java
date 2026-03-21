@@ -15,8 +15,8 @@ public class PublicHomeController {
     private HomeService homeService;
 
     @GetMapping
-    public HomeResponse getHomeData() {
-        return homeService.getHomeData();
+    public HomeResponse getHomeData(Boolean active) {
+        return homeService.getHomeData(active);
     }
 }
 

@@ -24,18 +24,22 @@ public class AuthService {
     private final OtpVerificationRepository otpRepo;
     private final UserRepository userRepo;
     private final JwtUtil jwtUtil;
+    private final SmsService smsService;
 
     public AuthService(
             OtpVerificationRepository otpRepo,
             UserRepository userRepo,
-            JwtUtil jwtUtil) {
+            JwtUtil jwtUtil,
+            SmsService smsService) {
         this.otpRepo = otpRepo;
         this.userRepo = userRepo;
         this.jwtUtil = jwtUtil;
+        this.smsService = smsService;
     }
 
     @Transactional
     public SendOtpResponse sendOtp(String phone) {
+        System.out.println("DEBUG: sendOtp called for phone: " + phone);
 
         String otp = String.valueOf(100000 + new Random().nextInt(900000));
 
@@ -51,6 +55,10 @@ public class AuthService {
                 LocalDateTime.now().plusMinutes(5));
 
         otpRepo.saveAndFlush(otpEntity);
+
+        // 🚀 Send SMS via Fast2SMS
+        String message = "Your OTP is " + otp;
+       // smsService.sendSms(phone, message);
 
         System.out.println("OTP is: " + otp);
 

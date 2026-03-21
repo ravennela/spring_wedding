@@ -6,5 +6,5 @@ import com.example.online.publicapi.event.dto.PublicEventTypeDto;
 
 public interface EventService {
 
-    List<PublicEventTypeDto> getAllEventTypes();
+    List<PublicEventTypeDto> getAllEventTypes(Boolean active);
 }

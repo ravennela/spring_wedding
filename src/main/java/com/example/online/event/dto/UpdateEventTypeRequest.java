@@ -4,7 +4,8 @@ public class UpdateEventTypeRequest {
 
     private String name;
     private String description;
-    private String imageUrl;
+    private String iconUrl;
+    private String iconPublicId;
     private boolean active;
 
     public String getName() {
@@ -23,12 +24,20 @@ public class UpdateEventTypeRequest {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getIconUrl() {
+        return iconUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public String getIconPublicId() {
+        return iconPublicId;
+    }
+
+    public void setIconPublicId(String iconPublicId) {
+        this.iconPublicId = iconPublicId;
     }
 
     public boolean isActive() {

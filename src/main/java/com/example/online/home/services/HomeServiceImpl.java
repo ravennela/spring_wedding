@@ -28,10 +28,10 @@ public class HomeServiceImpl implements HomeService {
         private DecorationRepository decorationRepository;
 
         @Override
-        public HomeResponse getHomeData() {
+        public HomeResponse getHomeData(Boolean active) {
 
                 // 1. Fetch categories (event types)
-                List<EventType> eventTypes = eventTypeRepository.findByIsActiveTrue();
+                List<EventType> eventTypes = eventTypeRepository.findByIsActive(active != null ? active : true  );
 
                 List<CategoryItemDto> categories = eventTypes.stream()
                                 .map(event -> new CategoryItemDto(

@@ -17,7 +17,7 @@ public class PublicEventController {
     private EventService eventService;
 
     @GetMapping
-    public List<PublicEventTypeDto> getAllEventTypes() {
-        return eventService.getAllEventTypes();
+    public List<PublicEventTypeDto> getAllEventTypes(Boolean active) {
+        return eventService.getAllEventTypes(active);
     }
 }
