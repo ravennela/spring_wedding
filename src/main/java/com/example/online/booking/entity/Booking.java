@@ -3,6 +3,7 @@ package com.example.online.booking.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import com.example.online.address.entity.Address;
 import com.example.online.common.entity.BaseEntity;
@@ -50,6 +51,9 @@ public class Booking extends BaseEntity {
     // 🎨 Selected decoration package
     @ManyToOne
     private Decoration decoration;
+
+    @Column(name = "event_time")
+    private LocalTime eventTime;
 
     // 📅 Event date
     @Column(nullable = false)
@@ -103,6 +107,7 @@ public class Booking extends BaseEntity {
     public String getBookingCode() {
         return bookingCode;
     }
+    
 
     public void setBookingCode(String bookingCode) {
         this.bookingCode = bookingCode;
@@ -127,7 +132,6 @@ public class Booking extends BaseEntity {
     public EventType getEventType() {
         return eventType;
     }
-    
 
     public String getCancelReason() {
         return cancelReason;
@@ -253,7 +257,16 @@ public class Booking extends BaseEntity {
         this.razorpayPaymentId = razorpayPaymentId;
     }
 
+
+    public LocalTime getEventTime() {
+        return eventTime;
+    }
+
+
+    public void setEventTime(LocalTime eventTime) {
+        this.eventTime = eventTime;
+    }
+
     // -------- getters & setters ----------
 
 }
-

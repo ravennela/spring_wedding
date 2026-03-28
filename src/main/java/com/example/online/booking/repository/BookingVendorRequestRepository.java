@@ -47,4 +47,6 @@ public interface BookingVendorRequestRepository
         boolean existsByBookingIdAndVendorId(UUID bookingId, UUID vendorId);
 
         void deleteByBooking_IdAndVendor_Id(UUID bookingId, UUID vendorId);
+        
+        void deleteByBooking_Id(UUID bookingId);
 }

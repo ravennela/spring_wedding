@@ -1,15 +1,24 @@
 package com.example.online.admin.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.online.admin.dto.AdminDashboardDto;
+import com.example.online.admin.dto.BookingOverviewDto;
+import com.example.online.admin.dto.BookingStatusDto;
+import com.example.online.admin.dto.DashboardStatsDto;
+import com.example.online.admin.dto.PendingActionsDto;
+import com.example.online.admin.dto.RecentBookingDto;
+import com.example.online.admin.dto.UpcomingEventDto;
 import com.example.online.admin.dto.VendorAssignementDto;
 import com.example.online.booking.dto.AdminBookingDetailResponseDto;
 import com.example.online.booking.dto.AdminBookingFilterRequest;
@@ -21,6 +30,8 @@ import com.example.online.booking.repository.BookingVendorRequestRepository;
 import com.example.online.booking.specifications.BookingSpecification;
 import com.example.online.common.enums.BookingStatus;
 import com.example.online.common.enums.VendorRequestStatus;
+import com.example.online.event.repository.EventTypeRepository;
+import com.example.online.payment.repository.PaymentRepository;
 import com.example.online.user.entity.User;
 import com.example.online.user.repository.UserRepository;
 import com.example.online.vendor.repository.VendorRepository;
@@ -33,16 +44,22 @@ public class AdminBookingServiceImpl implements AdminBookingService {
     private final BookingVendorRequestRepository bookingVendorRequestRepository;
     private final UserRepository userRepository;
     private final VendorRepository vendorRepository;
+    private final EventTypeRepository eventTypeRepository;
+    private final PaymentRepository paymentRepository;
 
     public AdminBookingServiceImpl(
             BookingRepository bookingRepository,
             BookingVendorRequestRepository bookingVendorRequestRepository,
             UserRepository userRepository,
+            PaymentRepository paymentRepository,
+            EventTypeRepository eventRepository,
             VendorRepository vendorRepository) {
         this.bookingRepository = bookingRepository;
         this.bookingVendorRequestRepository = bookingVendorRequestRepository;
         this.userRepository = userRepository;
+        this.paymentRepository = paymentRepository;
         this.vendorRepository = vendorRepository;
+        this.eventTypeRepository = eventRepository;
     }
 
     @Override
@@ -184,6 +201,7 @@ public class AdminBookingServiceImpl implements AdminBookingService {
         dto.setCustomerPhone(booking.getCustomer().getPhone());
         dto.setEventType(booking.getEventType().getName());
         dto.setDecoration(booking.getDecoration() != null ? booking.getDecoration().getName() : null);
+        dto.setDecorationId(booking.getDecoration() != null ? booking.getDecoration().getId() : null);
         dto.setEventDate(booking.getEventDate());
         dto.setCity(booking.getCity().getName());
         dto.setAddressLine(booking.getAddress() != null ? booking.getAddress().getLandmark() : null);
@@ -194,12 +212,14 @@ public class AdminBookingServiceImpl implements AdminBookingService {
         dto.setStatus(booking.getStatus());
 
         if (booking.getVendor() != null) {
-            com.example.online.vendor.entity.Vendor vendorRecord = vendorRepository.findByUserId(booking.getVendor().getId()).orElse(null);
+            com.example.online.vendor.entity.Vendor vendorRecord = vendorRepository
+                    .findByUserId(booking.getVendor().getId()).orElse(null);
             if (vendorRecord != null) {
                 dto.setVendorId(vendorRecord.getId());
-                String vendorDisplayName = vendorRecord.getCompanyName() != null && !vendorRecord.getCompanyName().isEmpty()
-                        ? vendorRecord.getCompanyName()
-                        : booking.getVendor().getName();
+                String vendorDisplayName = vendorRecord.getCompanyName() != null
+                        && !vendorRecord.getCompanyName().isEmpty()
+                                ? vendorRecord.getCompanyName()
+                                : booking.getVendor().getName();
                 if (vendorDisplayName == null || vendorDisplayName.isEmpty()) {
                     vendorDisplayName = booking.getVendor().getPhone();
                 }
@@ -212,6 +232,21 @@ public class AdminBookingServiceImpl implements AdminBookingService {
             dto.setVendorName("Not Assigned");
             dto.setVendorId(null);
         }
+
+        // Fetch all assigned vendors
+        List<BookingVendorRequest> requests = bookingVendorRequestRepository.findByBooking_Id(booking.getId());
+        List<AdminBookingDetailResponseDto.VendorInfo> assignedVendors = requests.stream()
+                .map(req -> {
+                    com.example.online.vendor.entity.Vendor vRec = vendorRepository
+                            .findByUserId(req.getVendor().getId()).orElse(null);
+                    String vName = (vRec != null && vRec.getCompanyName() != null && !vRec.getCompanyName().isEmpty())
+                            ? vRec.getCompanyName()
+                            : req.getVendor().getName();
+                    return new AdminBookingDetailResponseDto.VendorInfo(
+                            vRec != null ? vRec.getId() : req.getVendor().getId(), vName);
+                })
+                .toList();
+        dto.setAssignedVendors(assignedVendors);
 
         dto.setCustomerNote(booking.getCustomerNote());
         dto.setCreatedAt(booking.getCreatedAt());
@@ -235,5 +270,124 @@ public class AdminBookingServiceImpl implements AdminBookingService {
             }
             default -> throw new IllegalStateException("Invalid status transition");
         }
+    }
+
+    @Override
+    public AdminDashboardDto getDashboard() {
+        DashboardStatsDto stats = getStats();
+
+        // Booking Overview Chart
+        List<BookingOverviewDto> bookingOverview = getBookingOverview();
+
+        // Booking Status
+        BookingStatusDto bookingStatus = getBookingStatus();
+
+        // Recent Bookings
+        List<RecentBookingDto> recentBookings = getRecentBookings();
+
+        // Upcoming Events
+        List<UpcomingEventDto> upcomingEvents = getUpcomingEvents(PageRequest.of(0, 5));
+
+        // Pending Actions
+        PendingActionsDto pendingActions = getPendingActions();
+
+        AdminDashboardDto response = new AdminDashboardDto();
+        response.setStats(stats);
+        response.setBookingOverview(bookingOverview);
+        response.setBookingStatus(bookingStatus);
+        response.setRecentBookings(recentBookings);
+        response.setUpcomingEvents(upcomingEvents);
+        response.setPendingActions(pendingActions);
+
+        return response;
+
+    }
+
+    private DashboardStatsDto getStats() {
+
+        long totalBookings = bookingRepository.count();
+
+        long todayEvents = eventTypeRepository.countTodayEvents();
+
+        Double monthlyRevenue = paymentRepository.getMonthlyRevenue();
+
+        long pendingActions = bookingRepository.countPendingActions();
+
+        DashboardStatsDto dto = new DashboardStatsDto();
+        dto.setTotalBookings(totalBookings);
+        dto.setTodayEvents(todayEvents);
+        dto.setMonthlyRevenue(monthlyRevenue != null ? monthlyRevenue : 0);
+        dto.setPendingActions(pendingActions);
+        return dto;
+    }
+
+    private List<BookingOverviewDto> getBookingOverview() {
+
+        return bookingRepository.getWeeklyBookings(LocalDate.now().minusDays(6))
+                .stream()
+                .map(obj -> {
+                    BookingOverviewDto dto = new BookingOverviewDto();
+                    dto.setDay((String) obj[0]);
+                    dto.setCount((Long) obj[1]);
+                    return dto;
+                })
+                .toList();
+    }
+
+    private BookingStatusDto getBookingStatus() {
+
+        long confirmed = bookingRepository.countByStatus(BookingStatus.CONFIRMED);
+        long pending = bookingRepository.countByStatus(BookingStatus.IN_PROGRESS);
+        long cancelled = bookingRepository.countByStatus(BookingStatus.CANCELLED);
+
+        BookingStatusDto dto = new BookingStatusDto();
+        dto.setConfirmed(confirmed);
+        dto.setPending(pending);
+        dto.setCancelled(cancelled);
+
+        return dto;
+    }
+
+    private List<RecentBookingDto> getRecentBookings() {
+
+        return bookingRepository.findTop5ByOrderByCreatedAtDesc()
+                .stream()
+                .map(booking -> {
+                    RecentBookingDto dto = new RecentBookingDto();
+                    dto.setBookingId(booking.getBookingCode());
+                    dto.setCustomerName(booking.getCustomer() != null ? booking.getCustomer().getName() : "Unknown");
+                    dto.setEventType(booking.getEventType() != null ? booking.getEventType().getName() : "Unknown");
+                    dto.setStatus(booking.getStatus().name());
+                    return dto;
+                })
+                .toList();
+    }
+
+    private List<UpcomingEventDto> getUpcomingEvents(Pageable pageable) {
+
+        return eventTypeRepository.findTop5UpcomingEvents(pageable)
+                .stream()
+                .map(event -> {
+                    UpcomingEventDto dto = new UpcomingEventDto();
+                    dto.setTitle(event.getEventType().getName());
+                    dto.setDate(event.getEventDate().toString());
+                    // dto.setTime(event.getEventTime().toString());
+                    dto.setVendorName(event.getVendor() != null ? event.getVendor().getName() : "Not Assigned");
+                    dto.setStatus(event.getStatus());
+                    return dto;
+                })
+                .toList();
+    }
+
+    private PendingActionsDto getPendingActions() {
+
+        long vendorAssignments = bookingRepository.countPendingVendorAssignment();
+        long paymentReviews = paymentRepository.countPendingPayments();
+
+        PendingActionsDto dto = new PendingActionsDto();
+        dto.setVendorAssignmentCount(vendorAssignments);
+        dto.setPaymentReviewCount(paymentReviews);
+
+        return dto;
     }
 }

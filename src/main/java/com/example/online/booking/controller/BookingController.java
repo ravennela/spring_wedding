@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.online.booking.dto.BookingCreateRequestDto;
 import com.example.online.booking.dto.BookingDetailsResponseDto;
 import com.example.online.booking.dto.BookingResponseDto;
+import com.example.online.booking.dto.UpdateBookingRequest;
 import com.example.online.booking.service.BookingService;
 
 @RestController
@@ -68,7 +69,15 @@ public class BookingController {
 
                 return ResponseEntity.ok(response);
         }
+
+        @PutMapping("/update/{bookingId}")
+        public ResponseEntity<?> updateBooking(
+                        @PathVariable UUID bookingId,
+                        @RequestBody UpdateBookingRequest request) {
+                bookingService.updateBooking(bookingId, request);
+              Map<String, Object> response = new HashMap<>();
+                response.put("success", true);
+                response.put("message", "Booking updated successfully");
+                return ResponseEntity.ok(response);
+        }
 }
-
-
-

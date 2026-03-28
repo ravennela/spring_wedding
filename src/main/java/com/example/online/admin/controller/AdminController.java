@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.online.admin.dto.AdminDashboardDto;
 import com.example.online.admin.dto.VendorAssignementDto;
 import com.example.online.admin.service.AdminBookingService;
 import com.example.online.common.enums.ServiceType;
@@ -26,8 +27,8 @@ public class AdminController {
     private AdminBookingService adminBookingService;
 
     @GetMapping("/dashboard")
-    public String dashboard() {
-        return "Admin dashboard";
+    public ResponseEntity<AdminDashboardDto> dashboard() {
+        return ResponseEntity.ok(adminBookingService.getDashboard());
     }
 
     @GetMapping("/vendors")

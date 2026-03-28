@@ -1,15 +1,18 @@
 package com.example.online.home.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
+
+import com.example.online.event.entity.DecorationImage;
 
 public class DecorationCardDto {
     private UUID id;
     private String name;
     private BigDecimal price;
-    private String imageUrl;
+    private List<String> imageUrl;
 
-    public DecorationCardDto(UUID id, String name, BigDecimal price, String imageUrl) {
+    public DecorationCardDto(UUID id, String name, BigDecimal price, List<String> imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -40,11 +43,11 @@ public class DecorationCardDto {
         this.price = price;
     }
 
-    public String getImageUrl() {
+    public List<String> getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(List<String > imageUrl) {
         this.imageUrl = imageUrl;
     }
 

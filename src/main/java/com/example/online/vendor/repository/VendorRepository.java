@@ -39,5 +39,7 @@ public interface VendorRepository extends JpaRepository<Vendor, UUID> {
             AND bvr.booking.id = :bookingId
             """)
     List<VendorAssignementDto> getVendorsWithAssignment(UUID bookingId);
+
+    
     
 }

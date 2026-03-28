@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +20,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.online.auth.security.CustomUserDetails;
 import com.example.online.vendor.dto.BookingDetailsResponseDto;
+import com.example.online.vendor.dto.UpdateVendorProfileRequest;
 import com.example.online.vendor.dto.VendorAcceptedBookingResponseDto;
+import com.example.online.vendor.dto.VendorDashboardResponseDto;
+import com.example.online.vendor.dto.VendorEarningsResponseDto;
 import com.example.online.vendor.dto.VendorPendingBookingResponseDto;
+import com.example.online.vendor.dto.VendorProfileResponseDto;
 import com.example.online.vendor.service.VendorBookingService;
 
 @RestController
@@ -101,5 +107,35 @@ public class VendorBookingController {
                         @PathVariable UUID bookingId,
                         @AuthenticationPrincipal CustomUserDetails user) {
                 return vendorBookingService.getBookingDetails(bookingId, user.getId());
+        }
+
+        @GetMapping("/profile")
+        public VendorProfileResponseDto getProfile(
+                        @AuthenticationPrincipal CustomUserDetails user) {
+
+                UUID userId = user.getId();
+                return vendorBookingService.getVendorProfile(userId);
+        }
+
+        @PutMapping("/profile")
+        public void updateProfile(
+                        @AuthenticationPrincipal CustomUserDetails user,
+                        @RequestBody UpdateVendorProfileRequest request) {
+
+                vendorBookingService.updateVendorProfile(user.getId(), request);
+        }
+
+        @GetMapping("/dashboard")
+        public VendorDashboardResponseDto getDashboard(
+                        @AuthenticationPrincipal CustomUserDetails user) {
+
+                return vendorBookingService.getDashboard(user.getId());
+        }
+
+        @GetMapping("/earnings")
+        public VendorEarningsResponseDto getEarnings(
+                        @AuthenticationPrincipal CustomUserDetails user) {
+
+                return vendorBookingService.getEarnings(user.getId());
         }
 }

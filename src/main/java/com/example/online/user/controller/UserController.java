@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.online.auth.security.CustomUserDetails;
 import com.example.online.user.dto.UpdateProfileRequest;
+import com.example.online.user.dto.UserProfileDto;
 import com.example.online.user.service.UserService;
 
 @RestController
@@ -36,7 +37,11 @@ public class UserController {
             @AuthenticationPrincipal CustomUserDetails user) {
 
         return ResponseEntity.ok(
-                userService.isProfileComplete(user.getId())
-        );
+                userService.isProfileComplete(user.getId()));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileDto> getProfile(@AuthenticationPrincipal CustomUserDetails user) {
+        return ResponseEntity.ok(userService.getProfile(user.getId()));
     }
 }

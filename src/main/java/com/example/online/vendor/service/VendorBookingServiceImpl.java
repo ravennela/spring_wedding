@@ -1,6 +1,7 @@
 package com.example.online.vendor.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +14,20 @@ import com.example.online.common.enums.BookingStatus;
 import com.example.online.common.enums.ServiceType;
 import com.example.online.common.enums.VendorRequestStatus;
 import com.example.online.common.enums.VendorStatus;
+import com.example.online.location.entity.City;
+import com.example.online.location.repository.CityRepository;
 import com.example.online.user.entity.User;
 import com.example.online.user.repository.UserRepository;
 import com.example.online.vendor.dto.BookingDetailsResponseDto;
 import com.example.online.vendor.dto.DecorationDto;
+import com.example.online.vendor.dto.EarningItemDto;
+import com.example.online.vendor.dto.RecentJobDto;
+import com.example.online.vendor.dto.UpdateVendorProfileRequest;
 import com.example.online.vendor.dto.VendorAcceptedBookingResponseDto;
+import com.example.online.vendor.dto.VendorDashboardResponseDto;
+import com.example.online.vendor.dto.VendorEarningsResponseDto;
 import com.example.online.vendor.dto.VendorPendingBookingResponseDto;
+import com.example.online.vendor.dto.VendorProfileResponseDto;
 import com.example.online.vendor.dto.VendorResponseDto;
 import com.example.online.vendor.entity.BookingDecoration;
 import com.example.online.vendor.entity.Vendor;
@@ -37,6 +46,7 @@ public class VendorBookingServiceImpl implements VendorBookingService {
         private final BookingVendorRequestRepository bookingVendorRequestRepository;
         private final BookingRepository bookingRepository;
         private final UserRepository userRepository;
+        private final CityRepository cityRepository;
         private final BookingDecorationRepository bookingDecorationRepository;
 
         private final VendorRepository vendorRepository;
@@ -46,12 +56,14 @@ public class VendorBookingServiceImpl implements VendorBookingService {
                         BookingRepository bookingRepository,
                         UserRepository userRepository,
                         BookingDecorationRepository bookingDecorationRepository,
+                        CityRepository cityRepository,
                         VendorRepository vendorRepository) {
                 this.bookingVendorRequestRepository = bookingVendorRequestRepository;
                 this.bookingRepository = bookingRepository;
                 this.userRepository = userRepository;
                 this.bookingDecorationRepository = bookingDecorationRepository;
                 this.vendorRepository = vendorRepository;
+                this.cityRepository = cityRepository;
 
         }
 
@@ -108,6 +120,62 @@ public class VendorBookingServiceImpl implements VendorBookingService {
                 response.setTotalPrice(totalPrice);
 
                 return response;
+        }
+
+        @Override
+        public VendorDashboardResponseDto getDashboard(UUID userId) {
+
+                Vendor vendor = vendorRepository.findByUserId(userId)
+                                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+
+                UUID vendorId = vendor.getId();
+
+                int pending = bookingRepository.countByVendorIdAndStatus(
+                                vendorId, BookingStatus.IN_PROGRESS);
+
+                int accepted = bookingRepository.countByVendorIdAndStatus(
+                                vendorId, BookingStatus.ACCEPTED);
+
+                int completed = bookingRepository.countByVendorIdAndStatus(
+                                vendorId, BookingStatus.COMPLETED);
+
+                BigDecimal totalEarnings = bookingRepository.sumEarningsByVendorId(vendorId);
+
+                List<RecentJobDto> recentJobs = bookingRepository.findRecentJobs(
+                                vendorId,
+                                PageRequest.of(0, 5));
+
+                return new VendorDashboardResponseDto(
+                                pending,
+                                accepted,
+                                completed,
+                                totalEarnings != null
+                                                ? totalEarnings.doubleValue()
+                                                : 0.0,
+                                recentJobs);
+        }
+
+        @Override
+        public VendorEarningsResponseDto getEarnings(UUID userId) {
+
+                Vendor vendor = vendorRepository.findByUserId(userId)
+                                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+
+                UUID vendorId = vendor.getId();
+
+                BigDecimal total = bookingRepository.sumTotalEarnings(vendorId);
+
+                BigDecimal month = bookingRepository.sumThisMonthEarnings(vendorId);
+
+                BigDecimal pending = bookingRepository.sumPendingPayments(vendorId);
+
+                List<EarningItemDto> items = bookingRepository.findVendorEarnings(vendorId);
+
+                return new VendorEarningsResponseDto(
+                                total,
+                                month,
+                                pending,
+                                items);
         }
 
         @Override
@@ -187,6 +255,55 @@ public class VendorBookingServiceImpl implements VendorBookingService {
         }
 
         @Override
+        public void updateVendorProfile(UUID userId, UpdateVendorProfileRequest request) {
+
+                Vendor vendor = vendorRepository.findByUserId(userId)
+                                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+
+                User user = vendor.getUser();
+
+                // update user fields
+                user.setName(request.getName());
+                user.setEmail(request.getEmail());
+
+                // update city
+                if (request.getCityId() != null) {
+                        City city = cityRepository.findById(request.getCityId())
+                                        .orElseThrow(() -> new RuntimeException("City not found"));
+                        vendor.setCity(city);
+                }
+
+                // update vendor fields
+                vendor.setCompanyName(request.getCompanyName());
+                vendor.setAddress(request.getAddress());
+                vendor.setDescription(request.getDescription());
+
+                userRepository.save(user);
+                vendorRepository.save(vendor);
+        }
+
+        @Override
+        public VendorProfileResponseDto getVendorProfile(UUID userId) {
+
+                Vendor vendor = vendorRepository.findByUserId(userId)
+                                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+
+                User user = vendor.getUser();
+
+                return new VendorProfileResponseDto(
+                                user.getId().toString(),
+                                user.getName(),
+                                user.getEmail(),
+                                user.getPhone(),
+
+                                vendor.getCompanyName(),
+                                vendor.getServiceType() != null ? vendor.getServiceType().name() : null,
+                                vendor.getCity() != null ? vendor.getCity().getName() : null,
+                                vendor.getAddress(),
+                                vendor.getDescription());
+        }
+
+        @Override
         public void completeBooking(UUID bookingId, UUID vendorId) {
                 Booking booking = bookingRepository.findById(bookingId)
                                 .orElseThrow(() -> new RuntimeException("Booking not found"));
@@ -203,9 +320,8 @@ public class VendorBookingServiceImpl implements VendorBookingService {
 
                 VendorResponseDto dto = new VendorResponseDto();
 
-               
                 dto.setName(vendor.getUser().getName());
-                 dto.setId(vendor.getUser().getId());
+                dto.setId(vendor.getUser().getId());
                 dto.setPhone(vendor.getUser().getPhone());
 
                 dto.setCompanyName(vendor.getCompanyName());

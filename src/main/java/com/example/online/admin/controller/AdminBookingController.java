@@ -27,8 +27,6 @@ import com.example.online.booking.dto.AdminCancelRequestDto;
 import com.example.online.booking.dto.AssignVendorsRequestDto;
 import com.example.online.booking.dto.UpdateBookingStatusRequestDto;
 import com.example.online.admin.service.AdminBookingService;
-import com.example.online.common.enums.BookingStatus;
-import com.example.online.common.enums.PaymentStatus;
 
 import jakarta.validation.Valid;
 
@@ -43,14 +41,7 @@ public class AdminBookingController {
     public ResponseEntity<Page<AdminBookingListResponseDto>> getAllBookings(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) BookingStatus status,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) PaymentStatus paymentStatus) {
-
-        AdminBookingFilterRequest filter = new AdminBookingFilterRequest();
-        filter.setStatus(status);
-        filter.setCity(city);
-        filter.setPaymentStatus(paymentStatus);
+            AdminBookingFilterRequest filter) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 

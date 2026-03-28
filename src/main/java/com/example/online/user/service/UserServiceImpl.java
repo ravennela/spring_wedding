@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.online.location.entity.City;
 import com.example.online.location.repository.CityRepository;
 import com.example.online.user.dto.UpdateProfileRequest;
+import com.example.online.user.dto.UserProfileDto;
 import com.example.online.user.entity.User;
 import com.example.online.user.repository.UserRepository;
 
@@ -42,5 +43,18 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow();
 
         return user.getName() != null && user.getCity() != null;
+    }
+
+    public UserProfileDto getProfile(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        return new UserProfileDto(
+                user.getId().toString(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getCity() != null ? user.getCity().getName() : null
+                
+        );
     }
 }

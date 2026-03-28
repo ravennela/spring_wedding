@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.example.online.admin.dto.AdminDashboardDto;
 import com.example.online.admin.dto.VendorAssignementDto;
 import com.example.online.booking.dto.AdminBookingDetailResponseDto;
 import com.example.online.booking.dto.AdminBookingFilterRequest;
@@ -19,6 +20,8 @@ public interface AdminBookingService {
     void updateBookingStatus(UUID bookingId, BookingStatus newStatus);
 
     void adminCancelBooking(UUID bookingId, String reason);
+
+    AdminDashboardDto getDashboard();
 
     void assignVendors(UUID bookingId, List<UUID> vendorIds);
 

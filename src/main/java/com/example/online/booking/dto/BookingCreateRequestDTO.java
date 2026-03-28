@@ -1,6 +1,7 @@
 package com.example.online.booking.dto;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import com.example.online.common.enums.PaymentMode;
@@ -25,6 +26,9 @@ public class BookingCreateRequestDto {
 
     @NotNull
     private UUID decorationId;
+
+    private LocalTime eventTime;
+
     @NotNull
     private PaymentMode paymentMode;
 
@@ -51,6 +55,7 @@ public class BookingCreateRequestDto {
         this.cityId = cityId;
     }
 
+    
     public UUID getDecorationId() {
         return decorationId;
     }
@@ -89,6 +94,14 @@ public class BookingCreateRequestDto {
 
     public void setPaymentMode(PaymentMode paymentMode) {
         this.paymentMode = paymentMode;
+    }
+
+    public LocalTime getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(LocalTime eventTime) {
+        this.eventTime = eventTime;
     }
 
     

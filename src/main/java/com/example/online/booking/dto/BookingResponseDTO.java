@@ -3,6 +3,7 @@ package com.example.online.booking.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import com.example.online.common.enums.BookingStatus;
@@ -17,12 +18,15 @@ public class BookingResponseDto {
     private LocalDate eventDate;
     private BookingStatus status;
     private PaymentStatus paymentStatus;
+    private LocalTime eventTime;
     private BigDecimal totalAmount;
     private LocalDateTime createdAt;
 
     private String fullAddress;
     private String customerNote;
     private String razorpayOrderId;
+
+    
 
     // getters & setters
     public LocalDateTime getCreatedAt() {
@@ -118,6 +122,12 @@ public class BookingResponseDto {
 
     public void setStatus(BookingStatus status) {
         this.status = status;
+    }
+    public LocalTime getEventTime() {
+        return eventTime;
+    }
+    public void setEventTime(LocalTime eventTime) {
+        this.eventTime = eventTime;
     }
 }
 

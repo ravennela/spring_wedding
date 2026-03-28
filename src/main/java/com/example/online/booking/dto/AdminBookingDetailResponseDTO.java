@@ -3,6 +3,7 @@ package com.example.online.booking.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import com.example.online.common.enums.BookingStatus;
@@ -21,6 +22,7 @@ public class AdminBookingDetailResponseDto {
     // Event Info
     private String eventType;
     private String decoration;
+    private UUID decorationId;
     private LocalDate eventDate;
 
     // Location
@@ -39,6 +41,22 @@ public class AdminBookingDetailResponseDto {
     // Vendor
     private String vendorName;
     private UUID vendorId;
+    private List<VendorInfo> assignedVendors;
+
+    public static class VendorInfo {
+        private UUID id;
+        private String name;
+
+        public VendorInfo(UUID id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public UUID getId() { return id; }
+        public String getName() { return name; }
+        public void setId(UUID id) { this.id = id; }
+        public void setName(String name) { this.name = name; }
+    }
 
     // Notes
     private String customerNote;
@@ -100,6 +118,14 @@ public class AdminBookingDetailResponseDto {
 
     public void setDecoration(String decoration) {
         this.decoration = decoration;
+    }
+
+    public UUID getDecorationId() {
+        return decorationId;
+    }
+
+    public void setDecorationId(UUID decorationId) {
+        this.decorationId = decorationId;
     }
 
     public LocalDate getEventDate() {
@@ -180,6 +206,14 @@ public class AdminBookingDetailResponseDto {
 
     public void setVendorId(UUID vendorId) {
         this.vendorId = vendorId;
+    }
+
+    public List<VendorInfo> getAssignedVendors() {
+        return assignedVendors;
+    }
+
+    public void setAssignedVendors(List<VendorInfo> assignedVendors) {
+        this.assignedVendors = assignedVendors;
     }
 
     public String getCustomerNote() {

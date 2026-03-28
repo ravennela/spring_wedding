@@ -44,13 +44,17 @@ public class HomeServiceImpl implements HomeService {
                 // 2. Fetch trending decorations
                 List<Decoration> decorations = decorationRepository.findTop5ByActiveTrueOrderByCreatedAtDesc();
 
-                List<DecorationCardDto> trendingDecorations = decorations.stream()
-                                .map(dec -> new DecorationCardDto(
-                                                dec.getId(),
-                                                dec.getName(),
-                                                dec.getBasePrice(),
-                                                null))
-                                .collect(Collectors.toList());
+               List<DecorationCardDto> trendingDecorations = decorations.stream()
+        .map(dec -> new DecorationCardDto(
+                dec.getId(),
+                dec.getName(),
+                dec.getBasePrice(),
+                dec.getImages()
+                        .stream()
+                        .map(img -> img.getImageUrl()) // only URL
+                        .collect(Collectors.toList())
+        ))
+        .collect(Collectors.toList());
 
                 // 3. Static services section
                 List<ServiceItemDto> services = List.of(
