@@ -15,6 +15,8 @@ import com.example.online.common.enums.UserRole;
 import com.example.online.user.entity.User;
 import com.example.online.user.repository.UserRepository;
 import com.example.online.auth.util.JwtUtil;
+import com.example.online.vendor.entity.Vendor;
+import com.example.online.vendor.repository.VendorRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -23,16 +25,19 @@ public class AuthService {
 
     private final OtpVerificationRepository otpRepo;
     private final UserRepository userRepo;
+    private final VendorRepository vendorRepo;
     private final JwtUtil jwtUtil;
     private final SmsService smsService;
 
     public AuthService(
             OtpVerificationRepository otpRepo,
             UserRepository userRepo,
+            VendorRepository vendorRepo,
             JwtUtil jwtUtil,
             SmsService smsService) {
         this.otpRepo = otpRepo;
         this.userRepo = userRepo;
+        this.vendorRepo = vendorRepo;
         this.jwtUtil = jwtUtil;
         this.smsService = smsService;
     }
@@ -101,10 +106,30 @@ public class AuthService {
             user.setRole(request.getRole());
             userRepo.save(user);
         }
+
+        // Vendors need a row in `vendors` (linked by user_id) for dashboard / profile APIs
+        ensureVendorRecordExists(user);
+
         String token = jwtUtil.generateToken(
                 user.getId().toString(),
                 user.getRole().name());
 
         return new AuthResponseDto(token, user.getRole().name(), user.getId().toString(), user.getName());
+    }
+
+    /**
+     * Creates a minimal {@link Vendor} for new VENDOR users. Profile fields can be filled later via
+     * {@code PUT /vendor/bookings/profile}.
+     */
+    private void ensureVendorRecordExists(User user) {
+        if (user.getRole() != UserRole.VENDOR) {
+            return;
+        }
+        if (vendorRepo.findByUserId(user.getId()).isPresent()) {
+            return;
+        }
+        Vendor vendor = new Vendor();
+        vendor.setUser(user);
+        vendorRepo.save(vendor);
     }
 }
