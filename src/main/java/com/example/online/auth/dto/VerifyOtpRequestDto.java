@@ -1,7 +1,6 @@
 package com.example.online.auth.dto;
 
 import com.example.online.common.enums.UserRole;
-import com.example.online.user.entity.User;
 
 public class VerifyOtpRequestDto {
     private String phone;
