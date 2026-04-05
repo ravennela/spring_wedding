@@ -22,6 +22,10 @@ public interface BookingVendorRequestRepository
                         VendorRequestStatus status,
                         Pageable pageable);
 
+        int countByVendor_IdAndStatus(
+                        UUID vendorId,
+                        VendorRequestStatus status);
+
         @Query("SELECT bvr FROM BookingVendorRequest bvr " +
                         "WHERE bvr.vendor.id = :vendorId " +
                         "AND bvr.status = :status " +
@@ -31,6 +35,54 @@ public interface BookingVendorRequestRepository
                         @Param("status") VendorRequestStatus status,
                         @Param("bookingStatus") BookingStatus bookingStatus,
                         Pageable pageable);
+
+        @Query("SELECT COUNT(bvr) FROM BookingVendorRequest bvr " +
+                        "WHERE bvr.vendor.id = :vendorId " +
+                        "AND bvr.status = :status " +
+                        "AND bvr.booking.status = :bookingStatus")
+        int countByVendorIdAndStatusAndBookingStatus(
+                        @Param("vendorId") UUID vendorId,
+                        @Param("status") VendorRequestStatus status,
+                        @Param("bookingStatus") BookingStatus bookingStatus);
+
+        @Query("SELECT COALESCE(SUM(bvr.booking.totalAmount), 0) FROM BookingVendorRequest bvr " +
+                        "WHERE bvr.vendor.id = :vendorId " +
+                        "AND bvr.status = :status " +
+                        "AND bvr.booking.status = :bookingStatus")
+        java.math.BigDecimal sumEarningsByVendorId(
+                        @Param("vendorId") UUID vendorId,
+                        @Param("status") VendorRequestStatus status,
+                        @Param("bookingStatus") BookingStatus bookingStatus);
+
+        @Query("SELECT COALESCE(SUM(bvr.booking.totalAmount), 0) FROM BookingVendorRequest bvr " +
+                        "WHERE bvr.vendor.id = :vendorId " +
+                        "AND bvr.status = :status " +
+                        "AND bvr.booking.status = :bookingStatus " +
+                        "AND MONTH(bvr.booking.eventDate) = MONTH(CURRENT_DATE) " +
+                        "AND YEAR(bvr.booking.eventDate) = YEAR(CURRENT_DATE)")
+        java.math.BigDecimal sumThisMonthEarningsByVendorId(
+                        @Param("vendorId") UUID vendorId,
+                        @Param("status") VendorRequestStatus status,
+                        @Param("bookingStatus") BookingStatus bookingStatus);
+
+        @Query("SELECT COALESCE(SUM(bvr.booking.totalAmount), 0) FROM BookingVendorRequest bvr " +
+                        "WHERE bvr.vendor.id = :vendorId " +
+                        "AND bvr.status = :status " +
+                        "AND bvr.booking.paymentStatus = :paymentStatus")
+        java.math.BigDecimal sumPendingPaymentsByVendorId(
+                        @Param("vendorId") UUID vendorId,
+                        @Param("status") VendorRequestStatus status,
+                        @Param("paymentStatus") com.example.online.common.enums.PaymentStatus paymentStatus);
+
+        @Query("SELECT new com.example.online.vendor.dto.EarningItemDto(" +
+                        "bvr.booking.id, bvr.booking.eventType.name, bvr.booking.eventDate, bvr.booking.totalAmount, bvr.booking.paymentStatus) " +
+                        "FROM BookingVendorRequest bvr " +
+                        "WHERE bvr.vendor.id = :vendorId " +
+                        "AND bvr.status = :status " +
+                        "ORDER BY bvr.booking.eventDate DESC")
+        List<com.example.online.vendor.dto.EarningItemDto> findVendorEarnings(
+                        @Param("vendorId") UUID vendorId,
+                        @Param("status") VendorRequestStatus status);
 
         List<BookingVendorRequest> findByVendor_Id(UUID vendorId);
 

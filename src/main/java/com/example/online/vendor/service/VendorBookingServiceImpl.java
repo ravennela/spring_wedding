@@ -105,9 +105,8 @@ public class VendorBookingServiceImpl implements VendorBookingService {
                                 })
                                 .collect(Collectors.toList());
 
-                BigDecimal totalPrice = decorationDtos.stream()
-                                .map(d -> d.getPrice().multiply(BigDecimal.valueOf(d.getQuantity())))
-                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                // Price was showing 0 because of missing decorations, use booking.getTotalAmount() correctly
+                BigDecimal totalPrice = booking.getTotalAmount() != null ? booking.getTotalAmount() : BigDecimal.ZERO;
 
                 BookingDetailsResponseDto response = new BookingDetailsResponseDto();
                 response.setBookingId(booking.getId());
@@ -130,16 +129,18 @@ public class VendorBookingServiceImpl implements VendorBookingService {
 
                 UUID vendorId = vendor.getId();
 
-                int pending = bookingRepository.countByVendorIdAndStatus(
-                                vendorId, BookingStatus.IN_PROGRESS);
+                // Dashboard was showing zeros due to incorrect status usage and data mismatch
+                int pending = bookingVendorRequestRepository.countByVendor_IdAndStatus(
+                                vendorId, VendorRequestStatus.PENDING);
 
-                int accepted = bookingRepository.countByVendorIdAndStatus(
-                                vendorId, BookingStatus.ACCEPTED);
+                int accepted = bookingVendorRequestRepository.countByVendorIdAndStatusAndBookingStatus(
+                                vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.VENDOR_ASSIGNED);
 
-                int completed = bookingRepository.countByVendorIdAndStatus(
-                                vendorId, BookingStatus.COMPLETED);
+                int completed = bookingVendorRequestRepository.countByVendorIdAndStatusAndBookingStatus(
+                                vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
-                BigDecimal totalEarnings = bookingRepository.sumEarningsByVendorId(vendorId);
+                // Use the new booking vendor request based earnings sum to handle data inconsistency gracefully
+                BigDecimal totalEarnings = bookingVendorRequestRepository.sumEarningsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
                 List<RecentJobDto> recentJobs = bookingRepository.findRecentJobs(
                                 vendorId,
@@ -163,13 +164,13 @@ public class VendorBookingServiceImpl implements VendorBookingService {
 
                 UUID vendorId = vendor.getId();
 
-                BigDecimal total = bookingRepository.sumTotalEarnings(vendorId);
+                BigDecimal total = bookingVendorRequestRepository.sumEarningsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
-                BigDecimal month = bookingRepository.sumThisMonthEarnings(vendorId);
+                BigDecimal month = bookingVendorRequestRepository.sumThisMonthEarningsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
-                BigDecimal pending = bookingRepository.sumPendingPayments(vendorId);
+                BigDecimal pending = bookingVendorRequestRepository.sumPendingPaymentsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, com.example.online.common.enums.PaymentStatus.PENDING);
 
-                List<EarningItemDto> items = bookingRepository.findVendorEarnings(vendorId);
+                List<EarningItemDto> items = bookingVendorRequestRepository.findVendorEarnings(vendorId, VendorRequestStatus.ACCEPTED);
 
                 return new VendorEarningsResponseDto(
                                 total,
