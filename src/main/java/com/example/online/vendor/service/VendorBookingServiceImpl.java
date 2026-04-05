@@ -127,23 +127,24 @@ public class VendorBookingServiceImpl implements VendorBookingService {
                 Vendor vendor = vendorRepository.findByUserId(userId)
                                 .orElseThrow(() -> new RuntimeException("Vendor not found"));
 
-                UUID vendorId = vendor.getId();
+                // BookingVendorRequest.vendor is mapped to the User table, NOT Vendor table.
+                UUID vendorIdQuery = userId;
 
                 // Dashboard was showing zeros due to incorrect status usage and data mismatch
                 int pending = bookingVendorRequestRepository.countByVendor_IdAndStatus(
-                                vendorId, VendorRequestStatus.PENDING);
+                                vendorIdQuery, VendorRequestStatus.PENDING);
 
                 int accepted = bookingVendorRequestRepository.countByVendorIdAndStatusAndBookingStatus(
-                                vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.VENDOR_ASSIGNED);
+                                vendorIdQuery, VendorRequestStatus.ACCEPTED, BookingStatus.VENDOR_ASSIGNED);
 
                 int completed = bookingVendorRequestRepository.countByVendorIdAndStatusAndBookingStatus(
-                                vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
+                                vendorIdQuery, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
                 // Use the new booking vendor request based earnings sum to handle data inconsistency gracefully
-                BigDecimal totalEarnings = bookingVendorRequestRepository.sumEarningsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
+                BigDecimal totalEarnings = bookingVendorRequestRepository.sumEarningsByVendorId(vendorIdQuery, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
                 List<RecentJobDto> recentJobs = bookingRepository.findRecentJobs(
-                                vendorId,
+                                vendorIdQuery,
                                 PageRequest.of(0, 5));
 
                 return new VendorDashboardResponseDto(
@@ -162,15 +163,16 @@ public class VendorBookingServiceImpl implements VendorBookingService {
                 Vendor vendor = vendorRepository.findByUserId(userId)
                                 .orElseThrow(() -> new RuntimeException("Vendor not found"));
 
-                UUID vendorId = vendor.getId();
+                // BookingVendorRequest.vendor is mapped to the User table, NOT Vendor table.
+                UUID vendorIdQuery = userId;
 
-                BigDecimal total = bookingVendorRequestRepository.sumEarningsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
+                BigDecimal total = bookingVendorRequestRepository.sumEarningsByVendorId(vendorIdQuery, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
-                BigDecimal month = bookingVendorRequestRepository.sumThisMonthEarningsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
+                BigDecimal month = bookingVendorRequestRepository.sumThisMonthEarningsByVendorId(vendorIdQuery, VendorRequestStatus.ACCEPTED, BookingStatus.COMPLETED);
 
-                BigDecimal pending = bookingVendorRequestRepository.sumPendingPaymentsByVendorId(vendorId, VendorRequestStatus.ACCEPTED, com.example.online.common.enums.PaymentStatus.PENDING);
+                BigDecimal pending = bookingVendorRequestRepository.sumPendingPaymentsByVendorId(vendorIdQuery, VendorRequestStatus.ACCEPTED, com.example.online.common.enums.PaymentStatus.PENDING);
 
-                List<EarningItemDto> items = bookingVendorRequestRepository.findVendorEarnings(vendorId, VendorRequestStatus.ACCEPTED);
+                List<EarningItemDto> items = bookingVendorRequestRepository.findVendorEarnings(vendorIdQuery, VendorRequestStatus.ACCEPTED);
 
                 return new VendorEarningsResponseDto(
                                 total,
